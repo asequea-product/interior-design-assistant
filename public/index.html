@@ -11,16 +11,18 @@
     --sand: #F5F0E8; --warm-white: #FAF8F5; --charcoal: #2C2A27;
     --muted: #7A7670; --border: #E5E0D8; --accent: #B8A98A;
     --gold: #C9A84C; --low: #4A7C59; --high: #8B5E3C; --tag-bg: #EDE8DF;
+    --impact-1: #8B5E3C; --impact-2: #7A6540; --impact-3: #4A7C59;
   }
   body { font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--charcoal); min-height: 100vh; font-size: 15px; line-height: 1.6; }
 
   header { background: var(--charcoal); color: white; padding: 2.5rem 2rem 2.2rem; text-align: center; }
-  header .eyebrow { font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
-  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 500; letter-spacing: 0.01em; margin-bottom: 0.5rem; line-height: 1.15; }
+  header .eyebrow { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.15; }
   header p { color: #B8B4AD; font-size: 0.95rem; font-weight: 300; max-width: 480px; margin: 0 auto; }
 
-  .container { max-width: 820px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+  .container { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
 
+  /* UPLOAD */
   .upload-zone { border: 1.5px dashed var(--accent); border-radius: 14px; padding: 2.5rem 2rem; text-align: center; background: var(--sand); cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; }
   .upload-zone:hover, .upload-zone.drag-over { border-color: var(--gold); background: #EFE9DE; }
   .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -29,7 +31,7 @@
   .upload-zone p { color: var(--muted); font-size: 0.875rem; }
 
   .preview-section { margin-top: 1.25rem; display: none; }
-  .preview-count { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; }
+  .preview-count { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; display: flex; justify-content: space-between; }
   .preview-count strong { color: var(--charcoal); }
   .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
   .preview-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s; }
@@ -38,9 +40,8 @@
   .preview-item .rm { position: absolute; top: 6px; right: 6px; background: rgba(44,42,39,0.8); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; line-height: 24px; text-align: center; }
   .preview-item .preview-num { position: absolute; bottom: 6px; left: 6px; background: rgba(44,42,39,0.7); color: white; font-size: 11px; padding: 1px 6px; border-radius: 10px; }
 
-  .analyze-btn { display: block; width: 100%; margin-top: 1.5rem; padding: 1rem 1.5rem; background: var(--charcoal); color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .analyze-btn { display: block; width: 100%; margin-top: 1.5rem; padding: 1rem; background: var(--charcoal); color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, transform 0.1s; }
   .analyze-btn:hover:not(:disabled) { background: #3E3C38; transform: translateY(-1px); }
-  .analyze-btn:active:not(:disabled) { transform: translateY(0); }
   .analyze-btn:disabled { background: #C5C2BD; cursor: not-allowed; }
 
   .trust-row { display: flex; gap: 1.25rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
@@ -54,54 +55,90 @@
   .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes pulse { 0%,80%,100%{opacity:0.3;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
   .loading p { color: var(--muted); font-size: 0.825rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .loading-step { color: var(--accent); font-size: 0.8rem; margin-top: 0.5rem; }
 
+  .error-box { background: #FEF2F0; border: 1px solid #F4C3BB; border-radius: 8px; padding: 1rem 1.25rem; color: #8B3A2E; font-size: 0.875rem; margin-top: 1rem; display: none; }
+
+  /* RESULTS */
   .results { display: none; }
-  .results-header { margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
-  .results-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 500; margin-bottom: 0.25rem; }
-  .results-header p { color: var(--muted); font-size: 0.875rem; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 500; margin-bottom: 0.25rem; }
+  .section-sub { color: var(--muted); font-size: 0.875rem; margin-bottom: 1.75rem; }
 
-  .room-section { margin-bottom: 3rem; }
-  .room-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .room-img { width: 76px; height: 76px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0; cursor: pointer; transition: opacity 0.15s; }
+  /* ROOM HEADER */
+  .room-block { margin-bottom: 3.5rem; }
+  .room-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .room-img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0; cursor: pointer; }
   .room-img:hover { opacity: 0.85; }
-  .room-type { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 500; }
+  .room-type { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 500; }
   .room-elements { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
   .tag { background: var(--tag-bg); color: var(--muted); font-size: 0.72rem; padding: 3px 9px; border-radius: 20px; }
 
-  .item-card { background: white; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.875rem; overflow: hidden; }
-  .item-header { padding: 1rem 1.25rem 0.75rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  .item-name { font-weight: 500; font-size: 0.975rem; margin-bottom: 2px; }
-  .item-desc { color: var(--muted); font-size: 0.825rem; line-height: 1.45; }
-  .impact-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  /* ITEM ROW */
+  .item-block { margin-bottom: 2rem; }
+  .item-label-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+  .item-name { font-weight: 500; font-size: 1rem; }
+  .item-reason { color: var(--muted); font-size: 0.825rem; margin-left: auto; max-width: 340px; text-align: right; line-height: 1.4; }
+  .impact-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0; }
   .impact-high { background: #F9EDE6; color: var(--high); }
   .impact-medium { background: #F5F0E8; color: #7A6540; }
   .impact-low { background: #EBF4EF; color: var(--low); }
 
-  .options-row { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
-  .option { padding: 1rem 1.25rem; }
-  .option:first-child { border-right: 1px solid var(--border); }
-  .option-label { font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 8px; }
-  .label-low { color: var(--low); }
-  .label-high { color: var(--high); }
-  .option-name { font-weight: 500; font-size: 0.9rem; margin-bottom: 2px; line-height: 1.3; }
-  .option-store { color: var(--muted); font-size: 0.78rem; margin-bottom: 5px; }
-  .option-price { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; color: var(--charcoal); margin-bottom: 8px; }
-  .option-search { background: var(--sand); border: none; border-radius: 6px; padding: 6px 10px; font-size: 0.72rem; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; display: block; width: 100%; text-align: left; word-break: break-word; line-height: 1.4; }
-  .option-search:hover { background: #E8E2D8; color: var(--charcoal); }
+  /* PRODUCT CARDS GRID */
+  .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-  .plan-section { margin-top: 2.5rem; padding-top: 2rem; border-top: 2px solid var(--border); }
-  .plan-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 500; margin-bottom: 0.25rem; }
-  .plan-subtitle { color: var(--muted); font-size: 0.825rem; margin-bottom: 1.5rem; }
-  .month-row { display: grid; grid-template-columns: 88px 1fr; gap: 1rem; margin-bottom: 1rem; align-items: start; }
-  .month-label { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-weight: 600; color: var(--accent); padding-top: 0.15rem; text-transform: uppercase; letter-spacing: 0.04em; }
-  .month-items { display: flex; flex-direction: column; gap: 5px; }
-  .month-item-chip { background: white; border: 1px solid var(--border); border-radius: 7px; padding: 7px 12px; font-size: 0.84rem; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .chip-meta { font-size: 0.72rem; white-space: nowrap; }
-  .chip-budget { color: var(--low); }
-  .chip-premium { color: var(--high); }
+  .product-card { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.15s; }
+  .product-card:hover { box-shadow: 0 4px 20px rgba(44,42,39,0.08); }
 
-  .error-box { background: #FEF2F0; border: 1px solid #F4C3BB; border-radius: 8px; padding: 1rem 1.25rem; color: #8B3A2E; font-size: 0.875rem; margin-top: 1rem; display: none; }
+  .product-tier { display: flex; align-items: center; gap: 6px; padding: 10px 14px 0; font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.09em; }
+  .tier-budget { color: var(--low); }
+  .tier-premium { color: var(--high); }
 
+  .product-img-wrap { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--sand); position: relative; margin-top: 8px; }
+  .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+  .product-card:hover .product-img-wrap img { transform: scale(1.03); }
+  .product-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.8rem; }
+
+  .product-info { padding: 12px 14px 14px; flex: 1; display: flex; flex-direction: column; }
+  .product-name { font-weight: 500; font-size: 0.9rem; margin-bottom: 2px; line-height: 1.3; }
+  .product-store { color: var(--muted); font-size: 0.775rem; margin-bottom: 6px; }
+  .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--charcoal); margin-bottom: 10px; }
+  .product-btn { display: block; width: 100%; padding: 8px 12px; background: var(--charcoal); color: white; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500; text-align: center; cursor: pointer; text-decoration: none; transition: background 0.15s; margin-top: auto; }
+  .product-btn:hover { background: #3E3C38; }
+  .product-btn.fallback { background: transparent; color: var(--charcoal); border: 1px solid var(--border); }
+  .product-btn.fallback:hover { background: var(--sand); }
+
+  /* DIVIDER */
+  .section-divider { border: none; border-top: 2px solid var(--border); margin: 3rem 0; }
+
+  /* ACTION PLAN */
+  .action-plan { }
+  .plan-intro { color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem; }
+
+  .plan-phase { margin-bottom: 2rem; }
+  .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .phase-number { width: 32px; height: 32px; border-radius: 50%; background: var(--charcoal); color: white; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .phase-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; }
+  .phase-budget { margin-left: auto; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--charcoal); }
+  .phase-budget span { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--muted); font-weight: 400; display: block; text-align: right; }
+
+  .phase-items { display: flex; flex-direction: column; gap: 8px; margin-left: 44px; }
+  .phase-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .phase-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-high { background: var(--impact-1); }
+  .dot-medium { background: var(--impact-2); }
+  .dot-low { background: var(--impact-3); }
+  .phase-item-name { font-size: 0.9rem; font-weight: 500; flex: 1; }
+  .phase-item-room { font-size: 0.75rem; color: var(--muted); }
+  .phase-item-right { text-align: right; flex-shrink: 0; }
+  .phase-item-price { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--charcoal); }
+  .phase-item-tier { font-size: 0.7rem; color: var(--muted); }
+
+  .plan-total { background: var(--charcoal); color: white; border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; }
+  .plan-total-label { font-size: 0.85rem; color: #B8B4AD; }
+  .plan-total-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; }
+  .plan-total-range { font-size: 0.72rem; color: #B8B4AD; text-align: right; }
+
+  /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; }
   .modal-overlay.open { display: flex; }
   .modal-inner { position: relative; max-width: 860px; width: 100%; display: flex; align-items: center; gap: 1rem; }
@@ -112,11 +149,11 @@
   .modal-arrow:disabled { opacity: 0.2; cursor: default; }
   .modal-counter { position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; }
 
-  @media (max-width: 520px) {
-    .options-row { grid-template-columns: 1fr; }
-    .option:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-    .trust-row { gap: 0.75rem; }
+  @media (max-width: 560px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .item-reason { display: none; }
     header h1 { font-size: 2rem; }
+    .trust-row { gap: 0.75rem; }
   }
 </style>
 </head>
@@ -138,7 +175,7 @@
 
   <div class="preview-section" id="previewSection">
     <div class="preview-count">
-      <span><strong id="photoCountLabel">0 photos uploaded</strong> · Click a photo to preview</span>
+      <span><strong id="photoCountLabel">0 photos uploaded</strong> · Click to preview</span>
       <span style="font-size:0.75rem;color:var(--accent);">Max 5</span>
     </div>
     <div class="preview-grid" id="previewGrid"></div>
@@ -147,16 +184,19 @@
   <button class="analyze-btn" id="analyzeBtn" disabled>Analyze my rooms →</button>
 
   <div class="trust-row">
-    <span class="trust-item">Product suggestions with images</span>
-    <span class="trust-item">Low cost and premium options</span>
-    <span class="trust-item">Monthly plan to upgrade your home</span>
+    <span class="trust-item">Real product photos</span>
+    <span class="trust-item">Budget & premium options</span>
+    <span class="trust-item">Impact-based action plan</span>
   </div>
 
   <div class="error-box" id="errorBox"></div>
+
   <div class="loading" id="loading">
     <div class="loading-dots"><span></span><span></span><span></span></div>
     <p>Analyzing your spaces…</p>
+    <p class="loading-step" id="loadingStep">Reading room details</p>
   </div>
+
   <div class="results" id="results"></div>
 </div>
 
@@ -164,7 +204,7 @@
   <div class="modal-inner">
     <button class="modal-arrow" id="modalPrev">&#8592;</button>
     <div style="position:relative;flex:1;">
-      <img class="modal-img" id="modalImg" src="" alt="Room preview">
+      <img class="modal-img" id="modalImg" src="" alt="">
       <button class="modal-close" id="modalClose">×</button>
       <div class="modal-counter" id="modalCounter"></div>
     </div>
@@ -179,6 +219,7 @@ const previewSection = document.getElementById('previewSection');
 const photoCountLabel = document.getElementById('photoCountLabel');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const loading = document.getElementById('loading');
+const loadingStep = document.getElementById('loadingStep');
 const results = document.getElementById('results');
 const errorBox = document.getElementById('errorBox');
 const modalOverlay = document.getElementById('modalOverlay');
@@ -199,8 +240,7 @@ fileInput.addEventListener('change', e => addFiles([...e.target.files]));
 
 function addFiles(newFiles) {
   newFiles.forEach(f => { if (files.length < 5) files.push(f); });
-  renderPreviews();
-  updateUI();
+  renderPreviews(); updateUI();
 }
 
 function renderPreviews() {
@@ -234,11 +274,7 @@ function updateUI() {
   photoCountLabel.textContent = `${n} photo${n !== 1 ? 's' : ''} uploaded`;
 }
 
-function openModal(i) {
-  modalIndex = i;
-  updateModal();
-  modalOverlay.classList.add('open');
-}
+function openModal(i) { modalIndex = i; updateModal(); modalOverlay.classList.add('open'); }
 function updateModal() {
   modalImg.src = objectUrls[modalIndex] || '';
   modalCounter.textContent = `${modalIndex + 1} / ${files.length}`;
@@ -265,28 +301,7 @@ function toBase64(file) {
   });
 }
 
-analyzeBtn.addEventListener('click', async () => {
-  if (!files.length) return;
-  analyzeBtn.disabled = true;
-  loading.style.display = 'block';
-  results.style.display = 'none';
-  errorBox.style.display = 'none';
-  results.innerHTML = '';
-  loading.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-  try {
-    const images = await Promise.all(files.map(async (f, i) => ({
-      index: i, name: f.name,
-      mediaType: f.type || 'image/jpeg',
-      data: await toBase64(f)
-    })));
-
-    const imageContent = images.flatMap((img, i) => [
-      { type: 'text', text: `Image ${i + 1} (filename: ${img.name}):` },
-      { type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.data } }
-    ]);
-
-    const systemPrompt = `You are an expert interior design consultant for the Spanish market.
+const SYSTEM_PROMPT = `You are an expert interior design consultant for the Spanish market.
 Return ONLY a valid JSON object. No markdown, no code fences, no preamble.
 
 Schema:
@@ -303,38 +318,78 @@ Schema:
         "low_cost": {
           "product_name": "STOENSE Low-pile rug",
           "store": "IKEA",
-          "price_range": "€49–€89",
+          "price_min": 49,
+          "price_max": 89,
           "search_query": "IKEA STOENSE low pile rug off-white wool look 160x230 cm"
         },
         "high_cost": {
           "product_name": "Alfombra Boho tufted algodón",
           "store": "Zara Home",
-          "price_range": "€159–€249",
+          "price_min": 159,
+          "price_max": 249,
           "search_query": "Zara Home alfombra tufted algodón boho natural beige 160x230"
         }
       }
     }]
   }],
-  "monthly_plan": [{
-    "month": "Month 1",
-    "purchases": [{ "room": "Living Room", "item": "Area rug", "option": "low_cost" }]
+  "action_plan": [{
+    "phase": 1,
+    "title": "Highest impact changes",
+    "items": [{
+      "room": "Living Room",
+      "item": "Area rug",
+      "priority": "high",
+      "option": "low_cost",
+      "price_min": 49,
+      "price_max": 89
+    }]
   }]
 }
 
-search_query rules — this is critical:
-- Always include: brand + product line + material + color/finish + size when relevant
+search_query rules:
+- Always include: brand + product line + material + color + size when relevant
 - Good: "IKEA STOENSE low pile rug off-white wool look 160x230 cm"
-- Good: "Zara Home candelabro metal dorado mate 3 brazos estilo moderno"
-- Bad: "beige rug" or "floor lamp ikea"
-- Must be specific enough to visually identify the exact product on Google Shopping
+- Good: "Zara Home candelabro metal dorado mate 3 brazos moderno"
+- Bad: "beige rug" or "floor lamp"
+
+action_plan rules:
+- Group items into 3 phases ordered by decorative impact (high → medium → low)
+- Phase 1: items with priority "high" — biggest visual transformation
+- Phase 2: items with priority "medium" — noticeable improvements
+- Phase 3: items with priority "low" — finishing touches
+- Each phase item must include price_min and price_max (integers, euros)
+- option field: "low_cost" or "high_cost"
 
 Other rules:
-- Analyze each image separately with correct image_index (0-based)
 - Max 5 items_to_improve per room, ordered high → medium → low
 - Products only from: IKEA, Zara Home, Maisons du Monde, H&M Home, El Corte Inglés
-- Prices in euros realistic for Spain
-- Monthly plan: max 2–3 items per month, highest impact first
+- price_min and price_max must be integers in euros
 - Return ONLY the JSON`;
+
+analyzeBtn.addEventListener('click', async () => {
+  if (!files.length) return;
+  analyzeBtn.disabled = true;
+  loading.style.display = 'block';
+  results.style.display = 'none';
+  errorBox.style.display = 'none';
+  results.innerHTML = '';
+  loading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  const steps = ['Reading room details…', 'Identifying improvements…', 'Finding products…', 'Building your plan…'];
+  let si = 0;
+  const stepTimer = setInterval(() => { si = (si + 1) % steps.length; loadingStep.textContent = steps[si]; }, 2500);
+
+  try {
+    const images = await Promise.all(files.map(async (f, i) => ({
+      index: i, name: f.name,
+      mediaType: f.type || 'image/jpeg',
+      data: await toBase64(f)
+    })));
+
+    const imageContent = images.flatMap((img, i) => [
+      { type: 'text', text: `Image ${i + 1}:` },
+      { type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.data } }
+    ]);
 
     const response = await fetch('/api/analyze', {
       method: 'POST',
@@ -342,20 +397,19 @@ Other rules:
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 4000,
-        system: systemPrompt,
+        system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: [...imageContent, { type: 'text', text: 'Analyze these rooms and return the JSON.' }] }]
       })
     });
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error?.message || 'API error');
-    const rawText = data.content.map(b => b.type === 'text' ? b.text : '').join('');
-    const parsed = JSON.parse(rawText.replace(/```json|```/g, '').trim());
+    const parsed = await response.json();
+    if (!response.ok) throw new Error(parsed.error?.message || parsed.error || 'API error');
     renderResults(parsed, images);
   } catch (err) {
     errorBox.textContent = 'Something went wrong: ' + err.message;
     errorBox.style.display = 'block';
   } finally {
+    clearInterval(stepTimer);
     loading.style.display = 'none';
     analyzeBtn.disabled = false;
   }
@@ -367,24 +421,62 @@ function impactClass(p) {
   return l === 'high' ? 'impact-high' : l === 'low' ? 'impact-low' : 'impact-medium';
 }
 
-function searchUrl(q) {
-  return 'https://www.google.com/search?tbm=shop&q=' + encodeURIComponent(q);
+function dotClass(p) {
+  if (!p) return 'dot-medium';
+  const l = p.toLowerCase();
+  return l === 'high' ? 'dot-high' : l === 'low' ? 'dot-low' : 'dot-medium';
+}
+
+function priceStr(min, max) {
+  if (!min && !max) return '';
+  if (min && max) return `€${min}–€${max}`;
+  return `€${min || max}`;
+}
+
+function productCard(opt, tier) {
+  const isLow = tier === 'low';
+  const tierLabel = isLow ? '↓ Budget option' : '↑ Premium option';
+  const tierClass = isLow ? 'tier-budget' : 'tier-premium';
+  const price = priceStr(opt.price_min, opt.price_max);
+  const searchUrl = 'https://www.google.com/search?tbm=shop&q=' + encodeURIComponent(opt.search_query || '');
+  const btnUrl = opt.product_url || searchUrl;
+  const btnLabel = opt.product_url ? 'Ver producto →' : 'Buscar en Google →';
+  const btnClass = opt.product_url ? '' : 'fallback';
+
+  const imgHtml = opt.image_url
+    ? `<img src="${opt.image_url}" alt="${opt.product_name}" onerror="this.parentElement.innerHTML='<div class=product-img-placeholder>No image available</div>'">`
+    : `<div class="product-img-placeholder">Searching image…</div>`;
+
+  return `<div class="product-card">
+    <div class="product-tier ${tierClass}">${tierLabel}</div>
+    <div class="product-img-wrap">${imgHtml}</div>
+    <div class="product-info">
+      <div class="product-name">${opt.product_name || '—'}</div>
+      <div class="product-store">${opt.store || ''}</div>
+      <div class="product-price">${price}</div>
+      <a class="product-btn ${btnClass}" href="${btnUrl}" target="_blank" rel="noopener">${btnLabel}</a>
+    </div>
+  </div>`;
 }
 
 function renderResults(data, images) {
-  const total = data.rooms.reduce((a, r) => a + (r.items_to_improve?.length || 0), 0);
-  let html = `<div class="results-header">
-    <h2>Your personalized shopping plan</h2>
-    <p>Based on your room photos · ${data.rooms.length} room${data.rooms.length !== 1 ? 's' : ''} analyzed · ${total} improvements identified</p>
+  const totalItems = (data.rooms || []).reduce((a, r) => a + (r.items_to_improve?.length || 0), 0);
+  let html = '';
+
+  // PRODUCTS SECTION
+  html += `<div style="margin-bottom:0.5rem;">
+    <div class="section-title">Your personalized shopping plan</div>
+    <div class="section-sub">Based on your room photos · ${(data.rooms||[]).length} room${data.rooms?.length !== 1 ? 's' : ''} analyzed · ${totalItems} improvements identified</div>
   </div>`;
 
   (data.rooms || []).forEach(room => {
     const imgData = images[room.image_index];
     const imgSrc = imgData ? `data:${imgData.mediaType};base64,${imgData.data}` : '';
     const elements = (room.elements_present || []).map(e => `<span class="tag">${e}</span>`).join('');
-    html += `<div class="room-section">
+
+    html += `<div class="room-block">
       <div class="room-header">
-        ${imgSrc ? `<img class="room-img" src="${imgSrc}" alt="room" onclick="openModal(${room.image_index})" title="Click to enlarge">` : ''}
+        ${imgSrc ? `<img class="room-img" src="${imgSrc}" alt="room" onclick="openModal(${room.image_index})">` : ''}
         <div>
           <div class="room-type">${room.room_type || 'Room'}</div>
           <div class="room-elements">${elements}</div>
@@ -394,49 +486,80 @@ function renderResults(data, images) {
     (room.items_to_improve || []).forEach(item => {
       const lc = item.options?.low_cost || {};
       const hc = item.options?.high_cost || {};
-      html += `<div class="item-card">
-        <div class="item-header">
-          <div>
-            <div class="item-name">${item.item || ''}</div>
-            <div class="item-desc">${item.reason || ''}</div>
-          </div>
+      html += `<div class="item-block">
+        <div class="item-label-row">
           <span class="impact-badge ${impactClass(item.priority)}">${item.priority || 'medium'}</span>
+          <span class="item-name">${item.item || ''}</span>
+          <span class="item-reason">${item.reason || ''}</span>
         </div>
-        <div class="options-row">
-          <div class="option">
-            <div class="option-label label-low">↓ Budget option</div>
-            <div class="option-name">${lc.product_name || '—'}</div>
-            <div class="option-store">${lc.store || ''}</div>
-            <div class="option-price">${lc.price_range || ''}</div>
-            <button class="option-search" onclick="window.open('${searchUrl(lc.search_query || '')}','_blank')">🔍 ${lc.search_query || ''}</button>
-          </div>
-          <div class="option">
-            <div class="option-label label-high">↑ Premium option</div>
-            <div class="option-name">${hc.product_name || '—'}</div>
-            <div class="option-store">${hc.store || ''}</div>
-            <div class="option-price">${hc.price_range || ''}</div>
-            <button class="option-search" onclick="window.open('${searchUrl(hc.search_query || '')}','_blank')">🔍 ${hc.search_query || ''}</button>
-          </div>
+        <div class="products-grid">
+          ${productCard(lc, 'low')}
+          ${productCard(hc, 'high')}
         </div>
       </div>`;
     });
+
     html += `</div>`;
   });
 
-  if (data.monthly_plan?.length) {
-    html += `<div class="plan-section">
-      <div class="plan-title">Monthly shopping plan</div>
-      <p class="plan-subtitle">A realistic pace to upgrade your home without overwhelm</p>`;
-    data.monthly_plan.forEach(month => {
-      const chips = (month.purchases || []).map(p => {
-        const isBudget = p.option === 'low_cost';
-        return `<div class="month-item-chip">
-          <span>${p.item} <span style="color:var(--muted);font-size:0.78rem;">· ${p.room}</span></span>
-          <span class="chip-meta ${isBudget ? 'chip-budget' : 'chip-premium'}">${isBudget ? 'Budget' : 'Premium'}</span>
+  // ACTION PLAN SECTION
+  if (data.action_plan?.length) {
+    html += `<hr class="section-divider">
+    <div class="action-plan">
+      <div class="section-title">Action plan</div>
+      <p class="plan-intro">Ordered by decorative impact — start with Phase 1 for the biggest transformation</p>`;
+
+    let totalMin = 0, totalMax = 0;
+
+    data.action_plan.forEach((phase, pi) => {
+      const phaseMin = (phase.items || []).reduce((a, i) => a + (i.price_min || 0), 0);
+      const phaseMax = (phase.items || []).reduce((a, i) => a + (i.price_max || i.price_min || 0), 0);
+      totalMin += phaseMin;
+      totalMax += phaseMax;
+
+      const phaseColors = ['#8B5E3C', '#7A6540', '#4A7C59'];
+      const phaseColor = phaseColors[pi] || '#7A7670';
+
+      html += `<div class="plan-phase">
+        <div class="phase-header">
+          <div class="phase-number" style="background:${phaseColor}">${phase.phase}</div>
+          <div class="phase-title">${phase.title || 'Phase ' + phase.phase}</div>
+          <div class="phase-budget">
+            ${priceStr(phaseMin, phaseMax)}
+            <span>estimated budget</span>
+          </div>
+        </div>
+        <div class="phase-items">`;
+
+      (phase.items || []).forEach(item => {
+        const isBudget = item.option === 'low_cost';
+        html += `<div class="phase-item">
+          <div class="phase-item-dot ${dotClass(item.priority)}"></div>
+          <div>
+            <div class="phase-item-name">${item.item}</div>
+            <div class="phase-item-room">${item.room}</div>
+          </div>
+          <div class="phase-item-right">
+            <div class="phase-item-price">${priceStr(item.price_min, item.price_max)}</div>
+            <div class="phase-item-tier">${isBudget ? 'Budget' : 'Premium'}</div>
+          </div>
         </div>`;
-      }).join('');
-      html += `<div class="month-row"><div class="month-label">${month.month}</div><div class="month-items">${chips}</div></div>`;
+      });
+
+      html += `</div></div>`;
     });
+
+    html += `<div class="plan-total">
+      <div>
+        <div class="plan-total-label">Total estimated investment</div>
+        <div style="font-size:0.75rem;color:#B8B4AD;margin-top:2px;">All ${totalItems} improvements · budget options</div>
+      </div>
+      <div>
+        <div class="plan-total-amount">${priceStr(totalMin, totalMax)}</div>
+        <div class="plan-total-range">to transform your home</div>
+      </div>
+    </div>`;
+
     html += `</div>`;
   }
 
