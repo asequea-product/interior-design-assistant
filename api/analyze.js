@@ -9,9 +9,20 @@ async function searchProductImage(query, apiKey, cx) {
     if (!item) return null;
     return {
       imageUrl: item.link,
-      pageUrl: item.image?.contextLink || null,
       title: item.title || query,
     };
+  } catch {
+    return null;
+  }
+}
+
+// 👉 NUEVA FUNCIÓN (búsqueda de producto real)
+async function searchProductPage(query, apiKey, cx) {
+  try {
+    const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}&num=1`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.items?.[0]?.link || null;
   } catch {
     return null;
   }
@@ -45,18 +56,28 @@ export default async function handler(req, res) {
     const clean = rawText.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
 
-    // Enrich each product option with Google Image Search
+    // 👉 ENRIQUECER PRODUCTOS CON IMAGEN + LINK REAL
     for (const room of parsed.rooms || []) {
       for (const item of room.items_to_improve || []) {
         const lc = item.options?.low_cost;
         const hc = item.options?.high_cost;
+
+        // LOW COST
         if (lc?.search_query) {
-          const r = await searchProductImage(lc.search_query, googleKey, googleCx);
-          if (r) { lc.image_url = r.imageUrl; lc.product_url = r.pageUrl; }
+          const img = await searchProductImage(lc.search_query, googleKey, googleCx);
+          const productUrl = await searchProductPage(lc.search_query, googleKey, googleCx);
+
+          if (img) lc.image_url = img.imageUrl;
+          if (productUrl) lc.product_url = productUrl;
         }
+
+        // HIGH COST
         if (hc?.search_query) {
-          const r = await searchProductImage(hc.search_query, googleKey, googleCx);
-          if (r) { hc.image_url = r.imageUrl; hc.product_url = r.pageUrl; }
+          const img = await searchProductImage(hc.search_query, googleKey, googleCx);
+          const productUrl = await searchProductPage(hc.search_query, googleKey, googleCx);
+
+          if (img) hc.image_url = img.imageUrl;
+          if (productUrl) hc.product_url = productUrl;
         }
       }
     }
