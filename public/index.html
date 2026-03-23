@@ -3,166 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Room Refresh — AI Interior Design Assistant</title>
+<title>Room Refresh — AI Interior Design</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --sand: #F5F0E8; --warm-white: #FAF8F5; --charcoal: #2C2A27;
+    --sand: #F5F0E8; --white: #FAF8F5; --charcoal: #2C2A27;
     --muted: #7A7670; --border: #E5E0D8; --accent: #B8A98A;
-    --gold: #C9A84C; --low: #4A7C59; --high: #8B5E3C; --tag-bg: #EDE8DF;
-    --impact-1: #8B5E3C; --impact-2: #7A6540; --impact-3: #4A7C59;
+    --gold: #C9A84C; --green: #4A7C59; --brown: #8B5E3C;
+    --tag-bg: #EDE8DF;
+    --store-ikea: #0058A3; --store-zara: #1a1a1a;
+    --store-maisons: #8B6914; --store-hm: #E50010; --store-eci: #005826;
   }
-  body { font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--charcoal); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--charcoal); font-size: 15px; line-height: 1.6; }
 
-  header { background: var(--charcoal); color: white; padding: 2.5rem 2rem 2.2rem; text-align: center; }
-  header .eyebrow { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
-  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.15; }
-  header p { color: #B8B4AD; font-size: 0.95rem; font-weight: 300; max-width: 480px; margin: 0 auto; }
+  /* HEADER */
+  header { background: var(--charcoal); color: white; padding: 2rem 1.5rem; text-align: center; }
+  .eyebrow { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 500; margin-bottom: 0.4rem; }
+  header p { color: #B8B4AD; font-size: 0.9rem; font-weight: 300; max-width: 440px; margin: 0 auto; }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
 
   /* UPLOAD */
-  .upload-zone { border: 1.5px dashed var(--accent); border-radius: 14px; padding: 2.5rem 2rem; text-align: center; background: var(--sand); cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; }
+  .upload-zone { border: 1.5px dashed var(--accent); border-radius: 12px; padding: 2.25rem 1.5rem; text-align: center; background: var(--sand); cursor: pointer; position: relative; transition: border-color 0.2s, background 0.2s; }
   .upload-zone:hover, .upload-zone.drag-over { border-color: var(--gold); background: #EFE9DE; }
-  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .upload-icon { font-size: 2.2rem; margin-bottom: 0.75rem; display: block; }
-  .upload-zone h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 0.4rem; }
-  .upload-zone p { color: var(--muted); font-size: 0.875rem; }
+  .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon { font-size: 2rem; margin-bottom: 0.6rem; display: block; }
+  .upload-zone h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; margin-bottom: 0.3rem; }
+  .upload-zone p { color: var(--muted); font-size: 0.85rem; }
 
-  .preview-section { margin-top: 1.25rem; display: none; }
-  .preview-count { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; display: flex; justify-content: space-between; }
-  .preview-count strong { color: var(--charcoal); }
-  .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-  .preview-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s; }
-  .preview-item:hover { transform: scale(1.02); }
-  .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .preview-item .rm { position: absolute; top: 6px; right: 6px; background: rgba(44,42,39,0.8); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; line-height: 24px; text-align: center; }
-  .preview-item .preview-num { position: absolute; bottom: 6px; left: 6px; background: rgba(44,42,39,0.7); color: white; font-size: 11px; padding: 1px 6px; border-radius: 10px; }
+  /* PREVIEWS */
+  .preview-section { display: none; margin-top: 1rem; }
+  .preview-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; justify-content: space-between; }
+  .preview-meta strong { color: var(--charcoal); }
+  .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+  .preview-item { position: relative; aspect-ratio: 1; border-radius: 7px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
+  .preview-item:hover { opacity: 0.9; }
+  .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+  .preview-item .rm { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.65); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; line-height: 22px; text-align: center; cursor: pointer; }
+  .preview-item .num { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.6); color: white; font-size: 10px; padding: 1px 6px; border-radius: 8px; }
 
-  .analyze-btn { display: block; width: 100%; margin-top: 1.5rem; padding: 1rem; background: var(--charcoal); color: white; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, transform 0.1s; }
-  .analyze-btn:hover:not(:disabled) { background: #3E3C38; transform: translateY(-1px); }
-  .analyze-btn:disabled { background: #C5C2BD; cursor: not-allowed; }
+  /* CTA */
+  .cta-btn { display: block; width: 100%; margin-top: 1.25rem; padding: 0.95rem; background: var(--charcoal); color: white; border: none; border-radius: 9px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .cta-btn:hover:not(:disabled) { background: #3E3C38; }
+  .cta-btn:disabled { background: #C0BDB9; cursor: not-allowed; }
 
-  .trust-row { display: flex; gap: 1.25rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
-  .trust-item { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 5px; }
-  .trust-item::before { content: '✔'; color: var(--low); font-size: 0.75rem; }
+  .trust { display: flex; gap: 1rem; justify-content: center; margin-top: 0.9rem; flex-wrap: wrap; }
+  .trust span { font-size: 0.77rem; color: var(--muted); }
+  .trust span::before { content: '✔ '; color: var(--green); }
 
-  .loading { text-align: center; padding: 3.5rem; display: none; }
-  .loading-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 1rem; }
-  .loading-dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: pulse 1.4s ease-in-out infinite; }
-  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes pulse { 0%,80%,100%{opacity:0.3;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
-  .loading p { color: var(--muted); font-size: 0.825rem; letter-spacing: 0.06em; text-transform: uppercase; }
-  .loading-step { color: var(--accent); font-size: 0.8rem; margin-top: 0.5rem; }
+  /* LOADING */
+  .loading { display: none; text-align: center; padding: 3rem; }
+  .dots { display: flex; justify-content: center; gap: 7px; margin-bottom: 0.9rem; }
+  .dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: blink 1.4s infinite; }
+  .dots span:nth-child(2) { animation-delay: .2s; }
+  .dots span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100%{opacity:.25;transform:scale(.85)} 40%{opacity:1;transform:scale(1)} }
+  .loading p { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
-  .error-box { background: #FEF2F0; border: 1px solid #F4C3BB; border-radius: 8px; padding: 1rem 1.25rem; color: #8B3A2E; font-size: 0.875rem; margin-top: 1rem; display: none; }
+  .error-box { display: none; background: #FEF2F0; border: 1px solid #F4C3BB; border-radius: 8px; padding: 0.9rem 1.1rem; color: #8B3A2E; font-size: 0.85rem; margin-top: 1rem; }
 
   /* RESULTS */
-  .results { display: none; }
-  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 500; margin-bottom: 0.25rem; }
-  .section-sub { color: var(--muted); font-size: 0.875rem; margin-bottom: 1.75rem; }
+  .results { display: none; margin-top: 2.5rem; }
 
-  /* ROOM HEADER */
-  .room-block { margin-bottom: 3.5rem; }
-  .room-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .room-img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0; cursor: pointer; }
-  .room-img:hover { opacity: 0.85; }
-  .room-type { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 500; }
-  .room-elements { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-  .tag { background: var(--tag-bg); color: var(--muted); font-size: 0.72rem; padding: 3px 9px; border-radius: 20px; }
+  .results-intro { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .results-intro h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 0.2rem; }
+  .results-intro p { color: var(--muted); font-size: 0.85rem; }
 
-  /* ITEM ROW */
-  .item-block { margin-bottom: 2rem; }
-  .item-label-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
-  .item-name { font-weight: 500; font-size: 1rem; }
-  .item-reason { color: var(--muted); font-size: 0.825rem; margin-left: auto; max-width: 340px; text-align: right; line-height: 1.4; }
-  .impact-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; flex-shrink: 0; }
-  .impact-high { background: #F9EDE6; color: var(--high); }
+  /* ROOM */
+  .room-block { margin-bottom: 3rem; }
+  .room-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--border); }
+  .room-thumb { width: 68px; height: 68px; object-fit: cover; border-radius: 7px; border: 1px solid var(--border); cursor: pointer; flex-shrink: 0; }
+  .room-name { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 500; }
+  .room-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+  .tag { background: var(--tag-bg); color: var(--muted); font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; }
+
+  /* ITEM */
+  .item-block { margin-bottom: 1.75rem; }
+  .item-hdr { display: flex; align-items: baseline; gap: 10px; margin-bottom: 0.9rem; }
+  .impact { padding: 2px 9px; border-radius: 20px; font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; }
+  .impact-high { background: #F9EDE6; color: var(--brown); }
   .impact-medium { background: #F5F0E8; color: #7A6540; }
-  .impact-low { background: #EBF4EF; color: var(--low); }
+  .impact-low { background: #EBF4EF; color: var(--green); }
+  .item-name { font-weight: 500; font-size: 0.975rem; }
+  .item-reason { color: var(--muted); font-size: 0.8rem; margin-left: auto; max-width: 300px; text-align: right; line-height: 1.35; flex-shrink: 0; }
 
-  /* PRODUCT CARDS GRID */
-  .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  /* 4-PRODUCT GRID */
+  .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 
-  .product-card { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.15s; }
-  .product-card:hover { box-shadow: 0 4px 20px rgba(44,42,39,0.08); }
+  .prod-card { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+  .prod-tier { font-size: 0.62rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 0; }
+  .tier-b1, .tier-b2 { color: var(--green); }
+  .tier-p1, .tier-p2 { color: var(--brown); }
 
-  .product-tier { display: flex; align-items: center; gap: 6px; padding: 10px 14px 0; font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.09em; }
-  .tier-budget { color: var(--low); }
-  .tier-premium { color: var(--high); }
+  .prod-store-bar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; }
+  .store-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .store-name { font-size: 0.72rem; font-weight: 500; color: var(--muted); }
 
-  .product-img-wrap { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--sand); position: relative; margin-top: 8px; }
-  .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
-  .product-card:hover .product-img-wrap img { transform: scale(1.03); }
-  .product-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.8rem; }
+  .prod-body { padding: 0 10px 10px; flex: 1; display: flex; flex-direction: column; }
+  .prod-name { font-weight: 500; font-size: 0.85rem; line-height: 1.3; margin-bottom: 4px; }
+  .prod-price { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--charcoal); margin-bottom: 8px; }
+  .prod-btn { display: block; text-align: center; padding: 7px 8px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; text-decoration: none; transition: opacity 0.15s; margin-top: auto; color: white; }
+  .prod-btn:hover { opacity: 0.85; }
 
-  .product-info { padding: 12px 14px 14px; flex: 1; display: flex; flex-direction: column; }
-  .product-name { font-weight: 500; font-size: 0.9rem; margin-bottom: 2px; line-height: 1.3; }
-  .product-store { color: var(--muted); font-size: 0.775rem; margin-bottom: 6px; }
-  .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--charcoal); margin-bottom: 10px; }
-  .product-btn { display: block; width: 100%; padding: 8px 12px; background: var(--charcoal); color: white; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500; text-align: center; cursor: pointer; text-decoration: none; transition: background 0.15s; margin-top: auto; }
-  .product-btn:hover { background: #3E3C38; }
-  .product-btn.fallback { background: transparent; color: var(--charcoal); border: 1px solid var(--border); }
-  .product-btn.fallback:hover { background: var(--sand); }
+  /* store colors */
+  .btn-ikea { background: var(--store-ikea); }
+  .btn-zara { background: var(--store-zara); }
+  .btn-maisons { background: var(--store-maisons); }
+  .btn-hm { background: var(--store-hm); }
+  .btn-eci { background: var(--store-eci); }
+  .btn-default { background: var(--charcoal); }
 
-  /* DIVIDER */
-  .section-divider { border: none; border-top: 2px solid var(--border); margin: 3rem 0; }
+  /* PLAN */
+  .plan-block { margin-top: 2.5rem; padding-top: 2rem; border-top: 2px solid var(--border); }
+  .plan-block h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 500; margin-bottom: 0.2rem; }
+  .plan-block .sub { color: var(--muted); font-size: 0.83rem; margin-bottom: 1.75rem; }
 
-  /* ACTION PLAN */
-  .action-plan { }
-  .plan-intro { color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem; }
+  .phase { margin-bottom: 1.5rem; }
+  .phase-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+  .phase-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-weight: 600; color: white; flex-shrink: 0; }
+  .phase-title { font-weight: 500; font-size: 0.9rem; }
+  .phase-est { margin-left: auto; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; }
+  .phase-est small { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--muted); font-weight: 400; display: block; text-align: right; }
 
-  .plan-phase { margin-bottom: 2rem; }
-  .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
-  .phase-number { width: 32px; height: 32px; border-radius: 50%; background: var(--charcoal); color: white; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .phase-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; }
-  .phase-budget { margin-left: auto; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--charcoal); }
-  .phase-budget span { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--muted); font-weight: 400; display: block; text-align: right; }
+  .phase-rows { margin-left: 38px; display: flex; flex-direction: column; gap: 6px; }
+  .phase-row { background: white; border: 1px solid var(--border); border-radius: 7px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+  .phase-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .phase-row-name { font-size: 0.875rem; font-weight: 500; flex: 1; }
+  .phase-row-room { font-size: 0.72rem; color: var(--muted); }
+  .phase-row-price { font-family: 'Cormorant Garamond', serif; font-size: 0.975rem; font-weight: 600; margin-left: auto; }
+  .phase-row-tier { font-size: 0.68rem; color: var(--muted); text-align: right; }
 
-  .phase-items { display: flex; flex-direction: column; gap: 8px; margin-left: 44px; }
-  .phase-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
-  .phase-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .dot-high { background: var(--impact-1); }
-  .dot-medium { background: var(--impact-2); }
-  .dot-low { background: var(--impact-3); }
-  .phase-item-name { font-size: 0.9rem; font-weight: 500; flex: 1; }
-  .phase-item-room { font-size: 0.75rem; color: var(--muted); }
-  .phase-item-right { text-align: right; flex-shrink: 0; }
-  .phase-item-price { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--charcoal); }
-  .phase-item-tier { font-size: 0.7rem; color: var(--muted); }
-
-  .plan-total { background: var(--charcoal); color: white; border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; }
-  .plan-total-label { font-size: 0.85rem; color: #B8B4AD; }
-  .plan-total-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; }
-  .plan-total-range { font-size: 0.72rem; color: #B8B4AD; text-align: right; }
+  .total-bar { background: var(--charcoal); color: white; border-radius: 9px; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; }
+  .total-bar .lbl { font-size: 0.82rem; color: #B8B4AD; }
+  .total-bar .lbl2 { font-size: 0.72rem; color: #8A8680; margin-top: 2px; }
+  .total-bar .amt { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; }
 
   /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; }
-  .modal-overlay.open { display: flex; }
-  .modal-inner { position: relative; max-width: 860px; width: 100%; display: flex; align-items: center; gap: 1rem; }
-  .modal-img { width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px; display: block; }
-  .modal-close { position: absolute; top: -14px; right: -14px; background: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; line-height: 32px; text-align: center; color: var(--charcoal); }
-  .modal-arrow { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 1.4rem; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
-  .modal-arrow:hover { background: rgba(255,255,255,0.3); }
-  .modal-arrow:disabled { opacity: 0.2; cursor: default; }
-  .modal-counter { position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 99; align-items: center; justify-content: center; padding: 1.5rem; }
+  .modal.open { display: flex; }
+  .modal-inner { position: relative; max-width: 840px; width: 100%; display: flex; align-items: center; gap: 1rem; }
+  .modal img { width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px; }
+  .modal-close { position: absolute; top: -13px; right: -13px; background: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 17px; cursor: pointer; }
+  .modal-arr { background: rgba(255,255,255,0.15); border: none; color: white; font-size: 1.3rem; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-arr:hover { background: rgba(255,255,255,0.28); }
+  .modal-arr:disabled { opacity: 0.2; cursor: default; }
+  .modal-cnt { position: absolute; bottom: -26px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.55); font-size: 0.77rem; }
 
-  @media (max-width: 560px) {
-    .products-grid { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
     .item-reason { display: none; }
-    header h1 { font-size: 2rem; }
-    .trust-row { gap: 0.75rem; }
+    header h1 { font-size: 1.9rem; }
+  }
+  @media (max-width: 380px) {
+    .products-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
-
 <header>
-  <p class="eyebrow">AI-powered interior design</p>
+  <p class="eyebrow">AI interior design</p>
   <h1>Upload your room photos</h1>
-  <p>Get a clear shopping plan with real products from IKEA, Zara Home and Maisons du Monde</p>
+  <p>Get real product recommendations from IKEA, Zara Home and Maisons du Monde</p>
 </header>
 
 <div class="container">
@@ -170,200 +173,145 @@
     <input type="file" accept="image/*" multiple id="fileInput">
     <span class="upload-icon">🏠</span>
     <h2>Drag & drop your photos here</h2>
-    <p>1–5 photos (JPG, PNG, WEBP) · We'll identify what to change and show you what to buy</p>
+    <p>1–5 photos · JPG, PNG, WEBP</p>
   </div>
 
   <div class="preview-section" id="previewSection">
-    <div class="preview-count">
-      <span><strong id="photoCountLabel">0 photos uploaded</strong> · Click to preview</span>
-      <span style="font-size:0.75rem;color:var(--accent);">Max 5</span>
+    <div class="preview-meta">
+      <strong id="countLabel">0 photos</strong>
+      <span style="color:var(--accent);font-size:0.72rem;">Max 5</span>
     </div>
     <div class="preview-grid" id="previewGrid"></div>
   </div>
 
-  <button class="analyze-btn" id="analyzeBtn" disabled>Analyze my rooms →</button>
+  <button class="cta-btn" id="analyzeBtn" disabled>Analyze my rooms →</button>
 
-  <div class="trust-row">
-    <span class="trust-item">Real product photos</span>
-    <span class="trust-item">Budget & premium options</span>
-    <span class="trust-item">Impact-based action plan</span>
+  <div class="trust">
+    <span>4 products per improvement</span>
+    <span>Direct links to stores</span>
+    <span>Impact-based action plan</span>
   </div>
 
   <div class="error-box" id="errorBox"></div>
-
   <div class="loading" id="loading">
-    <div class="loading-dots"><span></span><span></span><span></span></div>
-    <p>Analyzing your spaces…</p>
-    <p class="loading-step" id="loadingStep">Reading room details</p>
+    <div class="dots"><span></span><span></span><span></span></div>
+    <p>Analyzing your rooms…</p>
   </div>
-
   <div class="results" id="results"></div>
 </div>
 
-<div class="modal-overlay" id="modalOverlay">
+<div class="modal" id="modal">
   <div class="modal-inner">
-    <button class="modal-arrow" id="modalPrev">&#8592;</button>
-    <div style="position:relative;flex:1;">
-      <img class="modal-img" id="modalImg" src="" alt="">
-      <button class="modal-close" id="modalClose">×</button>
-      <div class="modal-counter" id="modalCounter"></div>
+    <button class="modal-arr" id="mPrev">&#8592;</button>
+    <div style="position:relative;flex:1">
+      <img id="mImg" src="" alt="">
+      <button class="modal-close" id="mClose">×</button>
+      <div class="modal-cnt" id="mCnt"></div>
     </div>
-    <button class="modal-arrow" id="modalNext">&#8594;</button>
+    <button class="modal-arr" id="mNext">&#8594;</button>
   </div>
 </div>
 
 <script>
-const fileInput = document.getElementById('fileInput');
-const previewGrid = document.getElementById('previewGrid');
-const previewSection = document.getElementById('previewSection');
-const photoCountLabel = document.getElementById('photoCountLabel');
-const analyzeBtn = document.getElementById('analyzeBtn');
-const loading = document.getElementById('loading');
-const loadingStep = document.getElementById('loadingStep');
-const results = document.getElementById('results');
-const errorBox = document.getElementById('errorBox');
-const modalOverlay = document.getElementById('modalOverlay');
-const modalImg = document.getElementById('modalImg');
-const modalCounter = document.getElementById('modalCounter');
-const modalPrev = document.getElementById('modalPrev');
-const modalNext = document.getElementById('modalNext');
+const $ = id => document.getElementById(id);
+const dropZone = $('dropZone'), fileInput = $('fileInput');
+const previewSection = $('previewSection'), previewGrid = $('previewGrid'), countLabel = $('countLabel');
+const analyzeBtn = $('analyzeBtn'), loading = $('loading'), results = $('results'), errorBox = $('errorBox');
+const modal = $('modal'), mImg = $('mImg'), mCnt = $('mCnt'), mPrev = $('mPrev'), mNext = $('mNext');
 
-let files = [];
-let modalIndex = 0;
-let objectUrls = [];
+let files = [], urls = [], mIdx = 0;
 
-const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); addFiles([...e.dataTransfer.files].filter(f => f.type.startsWith('image/'))); });
-fileInput.addEventListener('change', e => addFiles([...e.target.files]));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); add([...e.dataTransfer.files].filter(f => f.type.startsWith('image/'))); });
+fileInput.addEventListener('change', e => add([...e.target.files]));
 
-function addFiles(newFiles) {
+function add(newFiles) {
   newFiles.forEach(f => { if (files.length < 5) files.push(f); });
-  renderPreviews(); updateUI();
+  render();
 }
-
-function renderPreviews() {
-  objectUrls.forEach(u => URL.revokeObjectURL(u));
-  objectUrls = [];
+function render() {
+  urls.forEach(u => URL.revokeObjectURL(u)); urls = [];
   previewGrid.innerHTML = '';
   files.forEach((f, i) => {
-    const url = URL.createObjectURL(f);
-    objectUrls.push(url);
-    const div = document.createElement('div');
-    div.className = 'preview-item';
-    const img = document.createElement('img');
-    img.src = url;
-    img.onclick = () => openModal(i);
-    const num = document.createElement('span');
-    num.className = 'preview-num';
-    num.textContent = i + 1;
-    const rm = document.createElement('button');
-    rm.className = 'rm';
-    rm.textContent = '×';
-    rm.onclick = e => { e.stopPropagation(); files.splice(i, 1); renderPreviews(); updateUI(); };
-    div.appendChild(img); div.appendChild(num); div.appendChild(rm);
-    previewGrid.appendChild(div);
+    const u = URL.createObjectURL(f); urls.push(u);
+    const d = document.createElement('div'); d.className = 'preview-item';
+    const img = document.createElement('img'); img.src = u; img.onclick = () => openModal(i);
+    const rm = document.createElement('button'); rm.className = 'rm'; rm.textContent = '×';
+    rm.onclick = e => { e.stopPropagation(); files.splice(i, 1); render(); sync(); };
+    const num = document.createElement('span'); num.className = 'num'; num.textContent = i + 1;
+    d.append(img, rm, num); previewGrid.appendChild(d);
   });
+  sync();
 }
-
-function updateUI() {
+function sync() {
   const n = files.length;
   analyzeBtn.disabled = n === 0;
   previewSection.style.display = n > 0 ? 'block' : 'none';
-  photoCountLabel.textContent = `${n} photo${n !== 1 ? 's' : ''} uploaded`;
+  countLabel.textContent = `${n} photo${n !== 1 ? 's' : ''} uploaded`;
 }
 
-function openModal(i) { modalIndex = i; updateModal(); modalOverlay.classList.add('open'); }
+function openModal(i) { mIdx = i; updateModal(); modal.classList.add('open'); }
 function updateModal() {
-  modalImg.src = objectUrls[modalIndex] || '';
-  modalCounter.textContent = `${modalIndex + 1} / ${files.length}`;
-  modalPrev.disabled = modalIndex === 0;
-  modalNext.disabled = modalIndex === files.length - 1;
+  mImg.src = urls[mIdx] || '';
+  mCnt.textContent = `${mIdx + 1} / ${files.length}`;
+  mPrev.disabled = mIdx === 0; mNext.disabled = mIdx === files.length - 1;
 }
-modalPrev.onclick = () => { if (modalIndex > 0) { modalIndex--; updateModal(); } };
-modalNext.onclick = () => { if (modalIndex < files.length - 1) { modalIndex++; updateModal(); } };
-document.getElementById('modalClose').onclick = () => modalOverlay.classList.remove('open');
-modalOverlay.onclick = e => { if (e.target === modalOverlay) modalOverlay.classList.remove('open'); };
+mPrev.onclick = () => { if (mIdx > 0) { mIdx--; updateModal(); } };
+mNext.onclick = () => { if (mIdx < files.length - 1) { mIdx++; updateModal(); } };
+$('mClose').onclick = () => modal.classList.remove('open');
+modal.onclick = e => { if (e.target === modal) modal.classList.remove('open'); };
 document.addEventListener('keydown', e => {
-  if (!modalOverlay.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft' && modalIndex > 0) { modalIndex--; updateModal(); }
-  if (e.key === 'ArrowRight' && modalIndex < files.length - 1) { modalIndex++; updateModal(); }
-  if (e.key === 'Escape') modalOverlay.classList.remove('open');
+  if (!modal.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft' && mIdx > 0) { mIdx--; updateModal(); }
+  if (e.key === 'ArrowRight' && mIdx < files.length - 1) { mIdx++; updateModal(); }
+  if (e.key === 'Escape') modal.classList.remove('open');
 });
 
-function toBase64(file) {
+function b64(file) {
   return new Promise((res, rej) => {
     const r = new FileReader();
     r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = rej;
-    r.readAsDataURL(file);
+    r.onerror = rej; r.readAsDataURL(file);
   });
 }
 
-const SYSTEM_PROMPT = `You are an expert interior design consultant for the Spanish market.
-Return ONLY a valid JSON object. No markdown, no code fences, no preamble.
+const SYSTEM = `You are an expert interior design consultant for Spain.
+Return ONLY valid JSON, no markdown, no code fences.
 
 Schema:
 {
   "rooms": [{
     "image_index": 0,
     "room_type": "Living Room",
-    "elements_present": ["sofa", "rug", "floor lamp"],
+    "elements_present": ["sofa","rug","lamp"],
     "items_to_improve": [{
       "item": "Area rug",
-      "reason": "Too small for the space and lacks warmth",
+      "reason": "Too small, doesn't unify the seating area",
       "priority": "high",
       "options": {
-        "low_cost": {
-          "product_name": "STOENSE Low-pile rug",
-          "store": "IKEA",
-          "price_min": 49,
-          "price_max": 89,
-          "search_query": "IKEA STOENSE low pile rug off-white wool look 160x230 cm"
-        },
-        "high_cost": {
-          "product_name": "Alfombra Boho tufted algodón",
-          "store": "Zara Home",
-          "price_min": 159,
-          "price_max": 249,
-          "search_query": "Zara Home alfombra tufted algodón boho natural beige 160x230"
-        }
+        "budget_1": { "product_name": "LOHALS Flat-woven rug", "store": "IKEA", "price_min": 49, "price_max": 79, "search_query": "LOHALS alfombra yute natural 160x230" },
+        "budget_2": { "product_name": "Alfombra yute trenzado", "store": "H&M Home", "price_min": 39, "price_max": 69, "search_query": "alfombra yute trenzado natural redonda" },
+        "premium_1": { "product_name": "Alfombra Boho tufted", "store": "Zara Home", "price_min": 159, "price_max": 249, "search_query": "alfombra tufted algodon boho natural beige 160x230" },
+        "premium_2": { "product_name": "Alfombra jute trenzado premium", "store": "Maisons du Monde", "price_min": 129, "price_max": 199, "search_query": "alfombra yute premium natural estilo boho 160x230" }
       }
     }]
   }],
   "action_plan": [{
     "phase": 1,
-    "title": "Highest impact changes",
-    "items": [{
-      "room": "Living Room",
-      "item": "Area rug",
-      "priority": "high",
-      "option": "low_cost",
-      "price_min": 49,
-      "price_max": 89
-    }]
+    "title": "Highest visual impact",
+    "color": "#8B5E3C",
+    "items": [{ "room": "Living Room", "item": "Area rug", "priority": "high", "tier": "budget_1", "price_min": 49, "price_max": 79 }]
   }]
 }
 
-search_query rules:
-- Always include: brand + product line + material + color + size when relevant
-- Good: "IKEA STOENSE low pile rug off-white wool look 160x230 cm"
-- Good: "Zara Home candelabro metal dorado mate 3 brazos moderno"
-- Bad: "beige rug" or "floor lamp"
-
-action_plan rules:
-- Group items into 3 phases ordered by decorative impact (high → medium → low)
-- Phase 1: items with priority "high" — biggest visual transformation
-- Phase 2: items with priority "medium" — noticeable improvements
-- Phase 3: items with priority "low" — finishing touches
-- Each phase item must include price_min and price_max (integers, euros)
-- option field: "low_cost" or "high_cost"
-
-Other rules:
-- Max 5 items_to_improve per room, ordered high → medium → low
-- Products only from: IKEA, Zara Home, Maisons du Monde, H&M Home, El Corte Inglés
-- price_min and price_max must be integers in euros
+Rules:
+- Always return exactly 4 options per item: budget_1, budget_2, premium_1, premium_2
+- budget stores: IKEA, H&M Home — premium stores: Zara Home, Maisons du Monde, El Corte Inglés
+- price_min / price_max are integers in euros
+- Max 5 items per room, ordered high → medium → low priority
+- action_plan: 3 phases by impact. Phase 1 = high priority, phase 2 = medium, phase 3 = low
+- phase color: phase 1 = "#8B5E3C", phase 2 = "#7A6540", phase 3 = "#4A7C59"
 - Return ONLY the JSON`;
 
 analyzeBtn.addEventListener('click', async () => {
@@ -375,173 +323,173 @@ analyzeBtn.addEventListener('click', async () => {
   results.innerHTML = '';
   loading.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-  const steps = ['Reading room details…', 'Identifying improvements…', 'Finding products…', 'Building your plan…'];
-  let si = 0;
-  const stepTimer = setInterval(() => { si = (si + 1) % steps.length; loadingStep.textContent = steps[si]; }, 2500);
-
   try {
-    const images = await Promise.all(files.map(async (f, i) => ({
-      index: i, name: f.name,
-      mediaType: f.type || 'image/jpeg',
-      data: await toBase64(f)
+    const imgs = await Promise.all(files.map(async (f, i) => ({
+      index: i, mediaType: f.type || 'image/jpeg', data: await b64(f)
     })));
 
-    const imageContent = images.flatMap((img, i) => [
+    const content = imgs.flatMap((img, i) => [
       { type: 'text', text: `Image ${i + 1}:` },
       { type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.data } }
     ]);
 
-    const response = await fetch('/api/analyze', {
+    const res = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 4000,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: [...imageContent, { type: 'text', text: 'Analyze these rooms and return the JSON.' }] }]
+        system: SYSTEM,
+        messages: [{ role: 'user', content: [...content, { type: 'text', text: 'Analyze and return JSON.' }] }]
       })
     });
 
-    const parsed = await response.json();
-    if (!response.ok) throw new Error(parsed.error?.message || parsed.error || 'API error');
-    renderResults(parsed, images);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || data.error || 'API error');
+    renderResults(data, imgs);
   } catch (err) {
     errorBox.textContent = 'Something went wrong: ' + err.message;
     errorBox.style.display = 'block';
   } finally {
-    clearInterval(stepTimer);
     loading.style.display = 'none';
     analyzeBtn.disabled = false;
   }
 });
 
+function storeClass(store) {
+  const s = (store || '').toLowerCase();
+  if (s.includes('ikea')) return 'btn-ikea';
+  if (s.includes('zara')) return 'btn-zara';
+  if (s.includes('maisons')) return 'btn-maisons';
+  if (s.includes('h&m')) return 'btn-hm';
+  if (s.includes('corte')) return 'btn-eci';
+  return 'btn-default';
+}
+function storeDotColor(store) {
+  const s = (store || '').toLowerCase();
+  if (s.includes('ikea')) return '#0058A3';
+  if (s.includes('zara')) return '#1a1a1a';
+  if (s.includes('maisons')) return '#8B6914';
+  if (s.includes('h&m')) return '#E50010';
+  if (s.includes('corte')) return '#005826';
+  return '#7A7670';
+}
 function impactClass(p) {
-  if (!p) return 'impact-medium';
-  const l = p.toLowerCase();
+  const l = (p || '').toLowerCase();
   return l === 'high' ? 'impact-high' : l === 'low' ? 'impact-low' : 'impact-medium';
 }
-
 function dotClass(p) {
-  if (!p) return 'dot-medium';
-  const l = p.toLowerCase();
-  return l === 'high' ? 'dot-high' : l === 'low' ? 'dot-low' : 'dot-medium';
+  const l = (p || '').toLowerCase();
+  return l === 'high' ? '#8B5E3C' : l === 'low' ? '#4A7C59' : '#7A6540';
+}
+function euros(min, max) {
+  if (min && max && min !== max) return `€${min}–€${max}`;
+  return `€${min || max || ''}`;
 }
 
-function priceStr(min, max) {
-  if (!min && !max) return '';
-  if (min && max) return `€${min}–€${max}`;
-  return `€${min || max}`;
+function tierLabel(tier) {
+  if (tier === 'budget_1') return '↓ Budget · Option 1';
+  if (tier === 'budget_2') return '↓ Budget · Option 2';
+  if (tier === 'premium_1') return '↑ Premium · Option 1';
+  if (tier === 'premium_2') return '↑ Premium · Option 2';
+  return tier;
+}
+function tierClass(tier) {
+  return tier?.startsWith('budget') ? (tier === 'budget_1' ? 'tier-b1' : 'tier-b2') : (tier === 'premium_1' ? 'tier-p1' : 'tier-p2');
 }
 
-function productCard(opt, tier) {
-  const isLow = tier === 'low';
-  const tierLabel = isLow ? '↓ Budget option' : '↑ Premium option';
-  const tierClass = isLow ? 'tier-budget' : 'tier-premium';
-  const price = priceStr(opt.price_min, opt.price_max);
-  const searchUrl = 'https://www.google.com/search?tbm=shop&q=' + encodeURIComponent(opt.search_query || '');
-  const btnUrl = opt.product_url || searchUrl;
-  const btnLabel = opt.product_url ? 'Ver producto →' : 'Buscar en Google →';
-  const btnClass = opt.product_url ? '' : 'fallback';
-
-  const imgHtml = opt.image_url
-    ? `<img src="${opt.image_url}" alt="${opt.product_name}" onerror="this.parentElement.innerHTML='<div class=product-img-placeholder>No image available</div>'">`
-    : `<div class="product-img-placeholder">Searching image…</div>`;
-
-  return `<div class="product-card">
-    <div class="product-tier ${tierClass}">${tierLabel}</div>
-    <div class="product-img-wrap">${imgHtml}</div>
-    <div class="product-info">
-      <div class="product-name">${opt.product_name || '—'}</div>
-      <div class="product-store">${opt.store || ''}</div>
-      <div class="product-price">${price}</div>
-      <a class="product-btn ${btnClass}" href="${btnUrl}" target="_blank" rel="noopener">${btnLabel}</a>
-    </div>
-  </div>`;
-}
-
-function renderResults(data, images) {
+function renderResults(data, imgs) {
   const totalItems = (data.rooms || []).reduce((a, r) => a + (r.items_to_improve?.length || 0), 0);
-  let html = '';
-
-  // PRODUCTS SECTION
-  html += `<div style="margin-bottom:0.5rem;">
-    <div class="section-title">Your personalized shopping plan</div>
-    <div class="section-sub">Based on your room photos · ${(data.rooms||[]).length} room${data.rooms?.length !== 1 ? 's' : ''} analyzed · ${totalItems} improvements identified</div>
+  let html = `<div class="results-intro">
+    <h2>Your personalized shopping plan</h2>
+    <p>${(data.rooms||[]).length} room${data.rooms?.length!==1?'s':''} analyzed · ${totalItems} improvements · 4 options each</p>
   </div>`;
 
   (data.rooms || []).forEach(room => {
-    const imgData = images[room.image_index];
-    const imgSrc = imgData ? `data:${imgData.mediaType};base64,${imgData.data}` : '';
-    const elements = (room.elements_present || []).map(e => `<span class="tag">${e}</span>`).join('');
+    const img = imgs[room.image_index];
+    const src = img ? `data:${img.mediaType};base64,${img.data}` : '';
+    const tags = (room.elements_present || []).map(e => `<span class="tag">${e}</span>`).join('');
 
     html += `<div class="room-block">
-      <div class="room-header">
-        ${imgSrc ? `<img class="room-img" src="${imgSrc}" alt="room" onclick="openModal(${room.image_index})">` : ''}
+      <div class="room-hdr">
+        ${src ? `<img class="room-thumb" src="${src}" onclick="openModal(${room.image_index})">` : ''}
         <div>
-          <div class="room-type">${room.room_type || 'Room'}</div>
-          <div class="room-elements">${elements}</div>
+          <div class="room-name">${room.room_type || 'Room'}</div>
+          <div class="room-tags">${tags}</div>
         </div>
       </div>`;
 
     (room.items_to_improve || []).forEach(item => {
-      const lc = item.options?.low_cost || {};
-      const hc = item.options?.high_cost || {};
-      html += `<div class="item-block">
-        <div class="item-label-row">
-          <span class="impact-badge ${impactClass(item.priority)}">${item.priority || 'medium'}</span>
-          <span class="item-name">${item.item || ''}</span>
-          <span class="item-reason">${item.reason || ''}</span>
-        </div>
-        <div class="products-grid">
-          ${productCard(lc, 'low')}
-          ${productCard(hc, 'high')}
-        </div>
-      </div>`;
-    });
+      const opts = item.options || {};
+      const tiers = ['budget_1','budget_2','premium_1','premium_2'];
 
+      html += `<div class="item-block">
+        <div class="item-hdr">
+          <span class="impact ${impactClass(item.priority)}">${item.priority||'medium'}</span>
+          <span class="item-name">${item.item||''}</span>
+          <span class="item-reason">${item.reason||''}</span>
+        </div>
+        <div class="products-grid">`;
+
+      tiers.forEach(tier => {
+        const opt = opts[tier] || {};
+        const url = opt.store_url || `https://www.google.com/search?q=${encodeURIComponent((opt.store||'') + ' ' + (opt.search_query||opt.product_name||''))}`;
+        const btnCls = storeClass(opt.store);
+        const dotColor = storeDotColor(opt.store);
+        const btnLabel = opt.store ? `Ver en ${opt.store} →` : 'Buscar →';
+
+        html += `<div class="prod-card">
+          <div class="prod-tier ${tierClass(tier)}">${tierLabel(tier)}</div>
+          <div class="prod-store-bar">
+            <div class="store-dot" style="background:${dotColor}"></div>
+            <span class="store-name">${opt.store||'—'}</span>
+          </div>
+          <div class="prod-body">
+            <div class="prod-name">${opt.product_name||'—'}</div>
+            <div class="prod-price">${euros(opt.price_min, opt.price_max)}</div>
+            <a class="prod-btn ${btnCls}" href="${url}" target="_blank" rel="noopener">${btnLabel}</a>
+          </div>
+        </div>`;
+      });
+
+      html += `</div></div>`;
+    });
     html += `</div>`;
   });
 
-  // ACTION PLAN SECTION
+  // ACTION PLAN
   if (data.action_plan?.length) {
-    html += `<hr class="section-divider">
-    <div class="action-plan">
-      <div class="section-title">Action plan</div>
-      <p class="plan-intro">Ordered by decorative impact — start with Phase 1 for the biggest transformation</p>`;
-
     let totalMin = 0, totalMax = 0;
+    data.action_plan.forEach(ph => {
+      (ph.items||[]).forEach(it => { totalMin += it.price_min||0; totalMax += it.price_max||it.price_min||0; });
+    });
 
-    data.action_plan.forEach((phase, pi) => {
-      const phaseMin = (phase.items || []).reduce((a, i) => a + (i.price_min || 0), 0);
-      const phaseMax = (phase.items || []).reduce((a, i) => a + (i.price_max || i.price_min || 0), 0);
-      totalMin += phaseMin;
-      totalMax += phaseMax;
+    html += `<div class="plan-block">
+      <h2>Action plan</h2>
+      <p class="sub">Ordered by decorative impact — start with Phase 1 for the biggest transformation</p>`;
 
-      const phaseColors = ['#8B5E3C', '#7A6540', '#4A7C59'];
-      const phaseColor = phaseColors[pi] || '#7A7670';
+    data.action_plan.forEach(ph => {
+      const phMin = (ph.items||[]).reduce((a,i)=>a+(i.price_min||0),0);
+      const phMax = (ph.items||[]).reduce((a,i)=>a+(i.price_max||i.price_min||0),0);
 
-      html += `<div class="plan-phase">
-        <div class="phase-header">
-          <div class="phase-number" style="background:${phaseColor}">${phase.phase}</div>
-          <div class="phase-title">${phase.title || 'Phase ' + phase.phase}</div>
-          <div class="phase-budget">
-            ${priceStr(phaseMin, phaseMax)}
-            <span>estimated budget</span>
-          </div>
+      html += `<div class="phase">
+        <div class="phase-hdr">
+          <div class="phase-num" style="background:${ph.color||'#7A7670'}">${ph.phase}</div>
+          <div class="phase-title">${ph.title||'Phase '+ph.phase}</div>
+          <div class="phase-est">${euros(phMin,phMax)}<small>estimated</small></div>
         </div>
-        <div class="phase-items">`;
+        <div class="phase-rows">`;
 
-      (phase.items || []).forEach(item => {
-        const isBudget = item.option === 'low_cost';
-        html += `<div class="phase-item">
-          <div class="phase-item-dot ${dotClass(item.priority)}"></div>
+      (ph.items||[]).forEach(it => {
+        html += `<div class="phase-row">
+          <div class="phase-dot" style="background:${dotClass(it.priority)}"></div>
           <div>
-            <div class="phase-item-name">${item.item}</div>
-            <div class="phase-item-room">${item.room}</div>
+            <div class="phase-row-name">${it.item}</div>
+            <div class="phase-row-room">${it.room}</div>
           </div>
-          <div class="phase-item-right">
-            <div class="phase-item-price">${priceStr(item.price_min, item.price_max)}</div>
-            <div class="phase-item-tier">${isBudget ? 'Budget' : 'Premium'}</div>
+          <div style="text-align:right;margin-left:auto">
+            <div class="phase-row-price">${euros(it.price_min,it.price_max)}</div>
+            <div class="phase-row-tier">${it.tier?.startsWith('budget')?'Budget':'Premium'}</div>
           </div>
         </div>`;
       });
@@ -549,18 +497,13 @@ function renderResults(data, images) {
       html += `</div></div>`;
     });
 
-    html += `<div class="plan-total">
+    html += `<div class="total-bar">
       <div>
-        <div class="plan-total-label">Total estimated investment</div>
-        <div style="font-size:0.75rem;color:#B8B4AD;margin-top:2px;">All ${totalItems} improvements · budget options</div>
+        <div class="lbl">Total estimated investment</div>
+        <div class="lbl2">All improvements · budget options</div>
       </div>
-      <div>
-        <div class="plan-total-amount">${priceStr(totalMin, totalMax)}</div>
-        <div class="plan-total-range">to transform your home</div>
-      </div>
-    </div>`;
-
-    html += `</div>`;
+      <div class="amt">${euros(totalMin,totalMax)}</div>
+    </div></div>`;
   }
 
   results.innerHTML = html;
