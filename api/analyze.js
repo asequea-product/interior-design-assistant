@@ -7,8 +7,8 @@ function buildStoreSearchUrl(store, query) {
   const s = (store || '').toLowerCase();
   const q = encodeURIComponent(query);
   if (s.includes('ikea')) return `https://www.ikea.com/es/es/search/?q=${q}`;
-  if (s.includes('zara home')) return `https://www.zarahome.com/es/search?searchTerm=${q}`;
-  if (s.includes('maisons du monde')) return `https://www.maisonsdumonde.com/ES/es/search?q=${q}`;
+  if (s.includes('zara home')) return `https://www.zarahome.com/es/search.html?term=${q}`;
+  if (s.includes('maisons du monde')) return `https://www.maisonsdumonde.com/ES/es/q/${q}`;
   if (s.includes('h&m')) return `https://www2.hm.com/es_es/search-results.html?q=${q}`;
   if (s.includes('el corte inglés')) return `https://www.elcorteingles.es/search/?s=${q}`;
   return `https://www.google.com/search?q=${encodeURIComponent(store + ' ' + query)}`;
