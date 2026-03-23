@@ -1,6 +1,6 @@
 export const config = {
   api: { bodyParser: { sizeLimit: '20mb' } },
-  maxDuration: 30,
+  maxDuration: 60,
 };
 
 function buildStoreSearchUrl(store, query) {
